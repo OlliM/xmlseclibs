@@ -1035,11 +1035,11 @@ class XMLSecurityDSig {
     }
 
     public function validateReference() {
-        $doc = $this->sigNode->ownerDocument;
-        if (! $doc->isSameNode($this->sigNode)) {
+        $xpath = $this->getXPathObj();
+        if (!$xpath->query('/secdsig:Signature')->length) {
+            // Remove signature from the digest calc
             $this->sigNode->parentNode->removeChild($this->sigNode);
         }
-        $xpath = $this->getXPathObj();
         $query = "./secdsig:SignedInfo/secdsig:Reference";
         $nodeset = $xpath->query($query, $this->sigNode);
         if ($nodeset->length == 0) {
